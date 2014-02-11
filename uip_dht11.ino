@@ -11,6 +11,15 @@ DHT dht(DHTPIN, DHTTYPE);
 float h;
 float t;
 
+// Using Plot.ly's Arduino API to visualize Temperature and Humidity Readings from A DHT22 Sensor
+#include "plotly_ethernet.h"
+plotly plotly; // initialize a plotly object, named plotly
+
+
+//char layout[]="{}";
+//char filename[] = "Temp_humid"; // name of the plot that will be saved in your plotly account -- resaving to the same filename will simply extend the existing traces with new data
+
+
 void temperature ()
 {
   // Reading temperature or humidity takes about 250 milliseconds!
@@ -52,7 +61,29 @@ void webserver()
       client.stop();
     }  
 }
+/*
+void plotlySetup()
+{
+  // Initialize plotly settings
+  plotly.VERBOSE = true; // turn to false to suppress printing over serial
+  plotly.DRY_RUN = false; // turn to false when you want to connect to plotly's servers 
+  plotly.username = "albertsp"; // your plotly username -- sign up at https://plot.ly/ssu or feel free to use this public account. password of the account is "password"
+  plotly.api_key = "not in github"; // "public_arduino"'s api_key -- char api_key[10]
+  plotly.timestamp = true; // tell plotly that you're stamping your data with a millisecond counter and that you want plotly to convert it into a date-formatted graph
+  plotly.timezone = "Europe/Madrid"; // full list of timezones is here:
+  
+}  
 
+void plotlyPost()
+{
+      // Open the Stream
+      plotly.open_stream(1, 2, filename, layout); // plotlystream(number_of_points, number_of_traces, filename, layout)
+
+      plotly.post(millis(),t); // post temperature to plotly (trace 1)
+      delay(150);
+      plotly.post(millis(),h); // post humidity to plotly (trace 2)  
+}
+*/
 void setup()
 {
   Serial.begin(9600);
@@ -65,14 +96,21 @@ void setup()
 
   // temperatura   
   dht.begin();
+  
+  // plotlySetup
+  //plotlySetup();
 }
 
 void loop()
 {
+  // plotly timer 
+  //plotlyPost();
+  
   // webserver 
   webserver();  
   
   // temperature
   temperature();
+  Serial.println("Completed Loop");
 }
 
